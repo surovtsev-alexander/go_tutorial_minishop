@@ -1,19 +1,19 @@
-version = "1.0"
+version: "1.0"
 
-service:
+services:
   product-service:
-    build: ./product-srevice
+    build: ./product-service
     ports:
       - "8080:8080"
     environment:
       - PORT=8080
 
   order-service:
-    build: ./order-serice
+    build: ./order-service
     ports:
       - "8081:8081"
     environment:
-      - PORT :8081
+      - PORT=8081
 
   user-service:
     build: ./user-service
