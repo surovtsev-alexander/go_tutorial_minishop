@@ -22,6 +22,15 @@ services:
     environment:
       - PORT=8082
 
+  cart-service:
+    build: ./cart-service
+    ports:
+      - "8083:8083"
+    environment:
+      - PORT=8083
+    depends_on:
+      - redis
+
   redis:
     image: redis:7-alpine
     ports:
