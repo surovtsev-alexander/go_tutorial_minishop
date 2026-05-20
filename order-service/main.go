@@ -28,6 +28,48 @@ var (
 	ctx    = context.Background()
 )
 
+// @title Order Service API
+// @version 1.0
+// @description API для управления заказами
+// @host localhost:8081
+// @BasePath /api/v1
+func main() {
+	initRedis()
+
+	r := mux.NewRouter()
+	api := r.PathPrefix("/api/v1").Subrouter()
+
+	// @Summary Получить все заказы
+	// @Description Возвращает список всех заказов
+	// @Tags orders
+	// @Produce json
+	// @Success 200 {array} Order
+	// @Router /orders [get]
+	api.HandleFunc("/orders", getOrders).Methods("GET")
+
+	// @Summary Создать заказ
+	// @Description Создаёт новый заказ
+	// @Tags orders
+	// @Accept json
+	// @Produce json
+	// @Param order body Order true "Данные заказа"
+	// @Success 201 {object} Order
+	// @Failure 400 {object} map[string]string
+	// @Router /orders [post]
+	api.HandleFunc("/orders", createOrder).Methods("POST")
+
+	// Подключаем Swagger UI
+	r.PathPrefix("/swagger/").Handler(httpSwagger.WrapHandler)
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8081"
+	}
+
+	log.Printf("Order service запущен на :%s", port)
+	log.Fatal(http.ListenAndServe(":"+port, r))
+}
+
 func initRedis() {
 	rdb = redis.NewClient(&redis.Options{
 		Addr:     "redis:6379",
@@ -87,46 +129,4 @@ func createOrder(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(order)
-}
-
-// @title Order Service API
-// @version 1.0
-// @description API для управления заказами
-// @host localhost:8081
-// @BasePath /api/v1
-func main() {
-	initRedis()
-
-	r := mux.NewRouter()
-	api := r.PathPrefix("/api/v1").Subrouter()
-
-	// @Summary Получить все заказы
-	// @Description Возвращает список всех заказов
-	// @Tags orders
-	// @Produce json
-	// @Success 200 {array} Order
-	// @Router /orders [get]
-	api.HandleFunc("/orders", getOrders).Methods("GET")
-
-	// @Summary Создать заказ
-	// @Description Создаёт новый заказ
-	// @Tags orders
-	// @Accept json
-	// @Produce json
-	// @Param order body Order true "Данные заказа"
-	// @Success 201 {object} Order
-	// @Failure 400 {object} map[string]string
-	// @Router /orders [post]
-	api.HandleFunc("/orders", createOrder).Methods("POST")
-
-	// Подключаем Swagger UI
-	r.PathPrefix("/swagger/").Handler(httpSwagger.WrapHandler)
-
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8081"
-	}
-
-	log.Printf("Order service запущен на :%s", port)
-	log.Fatal(http.ListenAndServe(":"+port, r))
 }
