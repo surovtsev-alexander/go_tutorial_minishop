@@ -1,8 +1,19 @@
-# go_tutorial_minishop/product-service/Dockerfile
+# product-service/Dockerfile
 FROM golang:1.21-alpine AS builder
 WORKDIR /app
-COPY . .
+
+# Сначала копируем go.mod и go.sum — для кэширования зависимостей
+COPY go.mod go.sum ./
 RUN go mod download
+
+# Копируем остальные файлы
+COPY . .
+
+# Отладка
+RUN ls -la
+RUN cat go.mod
+
+# Собираем
 RUN go build -o product-srv .
 
 FROM alpine:latest
