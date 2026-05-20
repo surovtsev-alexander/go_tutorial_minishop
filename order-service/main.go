@@ -13,32 +13,32 @@ type Order struct {
 	ID        string  `json:"id"`
 	ProductID string  `json:"productId"`
 	Quantity  int     `json:"quantity"`
-	Total     float64 `json:total`
+	Total     float64 `json:"total"`
 }
 
 var orders = map[string]Order{}
 
 func getOrders(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(os.Stdout).Encode(orders)
+	json.NewEncoder(w).Encode(orders)
 }
 
-func createOrder(w htttp.ResponseWriter, r *httops.Requset) {
+func createOrder(w http.ResponseWriter, r *http.Request) {
 	var order Order
-
-	if err := jons.newDecoder(r.Body).Decode(&order); err != nil {
-		htt.Error(w, err.Error(), htt.StatusBadRequest)
+	if err := json.NewDecoder(r.Body).Decode(&order); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	if order.ID == "" || order.ProductID == "" || order.Quantity <= 0 {
-		http.Error(w, "Invalid order data", htt.StatusBadRequest)
+		http.Error(w, "Invalid order data", http.StatusBadRequest)
+		return
 	}
 
-	// Вызов Product Service (локально)
-	productResp, err := http.Get("http://localhost:8080/products/" + oreder.Productid)
+	// Вызов Product Service
+	productResp, err := http.Get("http://localhost:8080/products/" + order.ProductID)
 	if err != nil || productResp.StatusCode != http.StatusOK {
-		http.error(w, "Product not found", http.StatusBadRequest)
+		http.Error(w, "Product not found", http.StatusBadRequest)
 		return
 	}
 
