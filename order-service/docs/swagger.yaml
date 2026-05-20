@@ -1,9 +1,63 @@
 basePath: /api/v1
+definitions:
+  main.Order:
+    properties:
+      id:
+        type: string
+      productId:
+        type: string
+      quantity:
+        type: integer
+      total:
+        type: number
+    type: object
 host: localhost:8081
 info:
   contact: {}
   description: API для управления заказами
   title: Order Service API
   version: "1.0"
-paths: {}
+paths:
+  /orders:
+    get:
+      description: Возвращает список всех заказов
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/main.Order'
+            type: array
+      summary: Получить все заказы
+      tags:
+      - orders
+    post:
+      consumes:
+      - application/json
+      description: Создаёт новый заказ
+      parameters:
+      - description: Данные заказа
+        in: body
+        name: order
+        required: true
+        schema:
+          $ref: '#/definitions/main.Order'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/main.Order'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Создать заказ
+      tags:
+      - orders
 swagger: "2.0"

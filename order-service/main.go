@@ -39,23 +39,7 @@ func main() {
 	r := mux.NewRouter()
 	api := r.PathPrefix("/api/v1").Subrouter()
 
-	// @Summary Получить все заказы
-	// @Description Возвращает список всех заказов
-	// @Tags orders
-	// @Produce json
-	// @Success 200 {array} Order
-	// @Router /orders [get]
 	api.HandleFunc("/orders", getOrders).Methods("GET")
-
-	// @Summary Создать заказ
-	// @Description Создаёт новый заказ
-	// @Tags orders
-	// @Accept json
-	// @Produce json
-	// @Param order body Order true "Данные заказа"
-	// @Success 201 {object} Order
-	// @Failure 400 {object} map[string]string
-	// @Router /orders [post]
 	api.HandleFunc("/orders", createOrder).Methods("POST")
 
 	// Подключаем Swagger UI
@@ -84,6 +68,13 @@ func initRedis() {
 	log.Println("✅ Подключено к Redis")
 }
 
+// getOrders возвращает список всех заказов
+// @Summary Получить все заказы
+// @Description Возвращает список всех заказов
+// @Tags orders
+// @Produce json
+// @Success 200 {array} Order
+// @Router /orders [get]
 func getOrders(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -96,6 +87,16 @@ func getOrders(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(orders)
 }
 
+// createOrder создаёт новый заказ
+// @Summary Создать заказ
+// @Description Создаёт новый заказ
+// @Tags orders
+// @Accept json
+// @Produce json
+// @Param order body Order true "Данные заказа"
+// @Success 201 {object} Order
+// @Failure 400 {object} map[string]string
+// @Router /orders [post]
 func createOrder(w http.ResponseWriter, r *http.Request) {
 	var order Order
 	if err := json.NewDecoder(r.Body).Decode(&order); err != nil {
