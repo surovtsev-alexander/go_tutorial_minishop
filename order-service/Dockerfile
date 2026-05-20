@@ -1,20 +1,18 @@
 # order-service/Dockerfile
-FROM golang:1.21-alpine AS builder
+FROM golang:1.23-alpine AS builder
 WORKDIR /app
 
-# Копируем go.mod и go.sum сначала — для кэширования зависимостей
+# Установи git — нужен для go get из GitHub
+RUN apk --no-cache add git
+
+# Копируем go.mod и go.sum для кэширования зависимостей
 COPY go.mod go.sum ./
 RUN go mod download
 
 # Копируем остальные файлы
 COPY . .
 
-# Добавим отладку: покажем, что внутри
-RUN ls -la
-RUN cat go.mod
-RUN cat main.go
-
-# Теперь пытаемся собрать — с выводом ошибки
+# Собираем
 RUN go build -o order-srv .
 
 FROM alpine:latest

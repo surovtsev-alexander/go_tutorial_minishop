@@ -9,8 +9,12 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/go-redis/redis/v8"
+	httpSwagger "github.com/swaggo/http-swagger"
+	_ "order-service/docs" // импорт для Swagger
 )
 
+// Order представляет заказ
+// swagger:model
 type Order struct {
 	ID        string  `json:"id"`
 	ProductID string  `json:"productId"`
@@ -26,12 +30,11 @@ var (
 
 func initRedis() {
 	rdb = redis.NewClient(&redis.Options{
-		Addr:     "redis:6379", // имя сервиса в Docker
-		Password: "",           // нет пароля
+		Addr:     "redis:6379",
+		Password: "",
 		DB:       0,
 	})
 
-	// Проверка подключения
 	_, err := rdb.Ping(ctx).Result()
 	if err != nil {
 		log.Fatal("Не удалось подключиться к Redis: ", err)
@@ -42,14 +45,12 @@ func initRedis() {
 func getOrders(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	// Попробуем получить из Redis
 	cached, err := rdb.Get(ctx, "orders").Result()
 	if err == nil {
 		w.Write([]byte(cached))
 		return
 	}
 
-	// Или из памяти
 	json.NewEncoder(w).Encode(orders)
 }
 
@@ -65,7 +66,6 @@ func createOrder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Вызов Product Service
 	productResp, err := http.Get("http://product-service:8080/products/" + order.ProductID)
 	if err != nil || productResp.StatusCode != http.StatusOK {
 		http.Error(w, "Product not found", http.StatusBadRequest)
@@ -81,7 +81,6 @@ func createOrder(w http.ResponseWriter, r *http.Request) {
 
 	orders[order.ID] = order
 
-	// Сохраним в Redis
 	data, _ := json.Marshal(orders)
 	rdb.Set(ctx, "orders", data, 0)
 
@@ -90,12 +89,38 @@ func createOrder(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(order)
 }
 
+// @title Order Service API
+// @version 1.0
+// @description API для управления заказами
+// @host localhost:8081
+// @BasePath /api/v1
 func main() {
 	initRedis()
 
 	r := mux.NewRouter()
-	r.HandleFunc("/orders", getOrders).Methods("GET")
-	r.HandleFunc("/orders", createOrder).Methods("POST")
+	api := r.PathPrefix("/api/v1").Subrouter()
+
+	// @Summary Получить все заказы
+	// @Description Возвращает список всех заказов
+	// @Tags orders
+	// @Produce json
+	// @Success 200 {array} Order
+	// @Router /orders [get]
+	api.HandleFunc("/orders", getOrders).Methods("GET")
+
+	// @Summary Создать заказ
+	// @Description Создаёт новый заказ
+	// @Tags orders
+	// @Accept json
+	// @Produce json
+	// @Param order body Order true "Данные заказа"
+	// @Success 201 {object} Order
+	// @Failure 400 {object} map[string]string
+	// @Router /orders [post]
+	api.HandleFunc("/orders", createOrder).Methods("POST")
+
+	// Подключаем Swagger UI
+	r.PathPrefix("/swagger/").Handler(httpSwagger.WrapHandler)
 
 	port := os.Getenv("PORT")
 	if port == "" {
