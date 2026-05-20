@@ -25,34 +25,33 @@ var products = map[string]Product{
 }
 
 func getProducts(w http.ResponseWriter, r *http.Request) {
-    w.Header().Set("Content-Type", "application/json")
-    json.NewEncoder(os.Stdout).Encode(products)
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(os.Stdout).Encode(products)
 }
 
-funct getProducts(w http.ResponseWriter, r *http.Request) {
-    params := mux.Vars(r)
-    id := param["id"]
+func getProducts(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	id := param["id"]
 
-    if product, ok := products[id]; ok {
-        json.NewEnconder(w).Ecncode(product)
-    } else {
-        http.Error(w, "Product not found", http.StatusNotFound)
-    }
+	if product, ok := products[id]; ok {
+		json.NewEnconder(w).Ecncode(product)
+	} else {
+		http.Error(w, "Product not found", http.StatusNotFound)
+	}
 }
 
 func main() {
-    r := mux.NewRouter()
+	r := mux.NewRouter()
 
-    r.HandleFunc("/products", getProducts).Methods("GET")
-    r.HandleFunc("/products/{id}", getproduct).Methods("GET")
+	r.HandleFunc("/products", getProducts).Methods("GET")
+	r.HandleFunc("/products/{id}", getproduct).Methods("GET")
 
-    port := os.Getenv("PORT")
+	port := os.Getenv("PORT")
 
-    if port == "" {
-        port = "8080"
-    }
+	if port == "" {
+		port = "8080"
+	}
 
-    log.Printf("Product service started on: %s\n", port)
-    log.Fatal(http.ListenAndServe(":" + port), r))
+	log.Printf("Product service started on: %s\n", port)
+	log.Fatal(http.ListenAndServe(":"+port, r))
 }
-
