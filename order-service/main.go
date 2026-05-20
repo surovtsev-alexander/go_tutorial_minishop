@@ -36,7 +36,7 @@ func createOrder(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Вызов Product Service
-	productResp, err := http.Get("http://localhost:8080/products/" + order.ProductID)
+	productResp, err := http.Get("http://product-service:8080/products/" + order.ProductID)
 	if err != nil || productResp.StatusCode != http.StatusOK {
 		http.Error(w, "Product not found", http.StatusBadRequest)
 		return

@@ -23,3 +23,4 @@ WORKDIR /root/
 COPY --from=builder /app/order-srv .
 EXPOSE 8081
 CMD ["./order-srv"]
+t
