@@ -1,4 +1,3 @@
-// go_tutorial_minishop/user-service/main.go
 package main
 
 import (
@@ -17,12 +16,8 @@ type User struct {
 }
 
 var users = map[string]User{
-	"1": {
-		ID: "1", Name: "Alice", Email: "alice@example.com",
-	},
-	"2": {
-		ID: "2", Name: "Bob", Email: "bob@example.com",
-	},
+	"1": {ID: "1", Name: "Alice", Email: "alice@example.com"},
+	"2": {ID: "2", Name: "Bob", Email: "bob@example.com"},
 }
 
 func getUsers(w http.ResponseWriter, r *http.Request) {
