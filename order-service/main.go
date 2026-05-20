@@ -69,3 +69,4 @@ func main() {
 	log.Printf("Order service запущен на :%s", port)
 	log.Fatal(http.ListenAndServe(":"+port, r))
 }
+

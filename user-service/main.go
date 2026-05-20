@@ -48,3 +48,4 @@ func main() {
 	log.Printf("User service запущен на :%s", port)
 	log.Fatal(http.ListenAndServe(":"+port, r))
 }
+
