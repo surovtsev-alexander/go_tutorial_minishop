@@ -1,0 +1,21 @@
+info:
+  contact: {}
+paths:
+  /send:
+    post:
+      consumes:
+      - application/json
+      description: Send message to Kafka
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Send message
+      tags:
+      - messages
+swagger: "2.0"

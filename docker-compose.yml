@@ -31,13 +31,6 @@ services:
     depends_on:
       - redis
 
-  simple-service:
-    build: ./simple-service
-    ports:
-      - "8084:8084"
-    environment:
-      - PORT=8084
-
   kafka-producer:
     build: ./kafka-producer
     ports:
@@ -51,6 +44,13 @@ services:
       - "8086:8086"
     environment:
       - PORT=8086
+
+#  simple-service:
+#    build: ./simple-service
+#    ports:
+#      - "8084:8084"
+#    environment:
+#      - PORT=8084
 
   redis:
     image: redis:7-alpine
