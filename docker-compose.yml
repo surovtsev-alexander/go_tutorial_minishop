@@ -38,6 +38,20 @@ services:
     environment:
       - PORT=8084
 
+  kafka-producer:
+    build: ./kafka-producer
+    ports:
+      - "8085:8085"
+    environment:
+      - PORT=8085
+
+  kafka-consumer:
+    build: ./kafka-consumer
+    ports:
+      - "8086:8086"
+    environment:
+      - PORT=8086
+
   redis:
     image: redis:7-alpine
     ports:
