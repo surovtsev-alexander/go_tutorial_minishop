@@ -5,8 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ff52c9e7-8c9b-41a8-9ef6-d2ab6e241258" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gigaide/gigaide.properties" beforeDir="false" afterPath="$PROJECT_DIR$/.gigaide/gigaide.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cart-service/internal/cart/cart.go" beforeDir="false" afterPath="$PROJECT_DIR$/cart-service/internal/cart/cart.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cart-service/internal/handler/cart_handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/cart-service/internal/handler/cart_handler.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cart-service/internal/repository/cart_redis.go" beforeDir="false" afterPath="$PROJECT_DIR$/cart-service/internal/repository/cart_redis.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cart-service/internal/usecase/cart_usecase.go" beforeDir="false" afterPath="$PROJECT_DIR$/cart-service/internal/usecase/cart_usecase.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cart-service/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/cart-service/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kafka-consumer/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/kafka-consumer/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kafka-producer/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/kafka-producer/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/simple-service/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/simple-service/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/simple-service/models.go" beforeDir="false" afterPath="$PROJECT_DIR$/simple-service/models.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/main.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

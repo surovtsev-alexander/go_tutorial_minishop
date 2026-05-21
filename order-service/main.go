@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/gorilla/mux"
 	"github.com/go-redis/redis/v8"
+	"github.com/gorilla/mux"
 	httpSwagger "github.com/swaggo/http-swagger"
 	_ "order-service/docs" // импорт для Swagger
 )

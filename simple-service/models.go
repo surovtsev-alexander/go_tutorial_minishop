@@ -2,8 +2,8 @@ package main
 
 // Cart represents a user's shopping cart
 type Cart struct {
-	UserID string  `json:"userId"`
-	Items  []Item  `json:"items"`
+	UserID string `json:"userId"`
+	Items  []Item `json:"items"`
 }
 
 // Item represents an item in the cart
