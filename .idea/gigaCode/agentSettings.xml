@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GigaCodeAgentSettings">
+    <option name="autoApprovedCommands">
+      <list>
+        <Execute>
+          <option name="pattern" value="cd /Users/surovtsev/projects/go_lang/go_tutorial_minishop &amp;&amp; docker-compose up --build cart-service" />
+        </Execute>
+        <Execute>
+          <option name="pattern" value="cd /Users/surovtsev/projects/go_lang/go_tutorial_minishop/cart-service &amp;&amp; rm go.mod go.sum" />
+        </Execute>
+        <Execute>
+          <option name="pattern" value="cd /Users/surovtsev/projects/go_lang/go_tutorial_minishop/simple-service &amp;&amp; go mod init simple-service" />
+        </Execute>
+      </list>
+    </option>
+  </component>
+</project>

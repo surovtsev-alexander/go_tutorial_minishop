@@ -1,22 +1,15 @@
-package handler
+package main
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"strconv"
-
-	"cart/internal/usecase"
 )
 
-type CartHandler struct {
-	usecase *usecase.CartUsecase
-}
+var cart Cart
 
-func NewCartHandler(uc *usecase.CartUsecase) *CartHandler {
-	return &CartHandler{usecase: uc}
-}
-
-func (h *CartHandler) AddItem(w http.ResponseWriter, r *http.Request) {
+func addItemHandler(w http.ResponseWriter, r *http.Request) {
 	userID := r.URL.Query().Get("userId")
 	productID := r.URL.Query().Get("productId")
 	quantity, _ := strconv.Atoi(r.URL.Query().Get("quantity"))
@@ -27,28 +20,36 @@ func (h *CartHandler) AddItem(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := h.usecase.AddItem(userID, productID, quantity, price)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+	// Initialize cart if empty
+	if cart.UserID == "" {
+		cart.UserID = userID
 	}
+
+	// Add item to cart
+	cart.Items = append(cart.Items, Item{
+		ProductID: productID,
+		Quantity:  quantity,
+		Price:     price,
+	})
 
 	w.WriteHeader(http.StatusCreated)
 }
 
-func (h *CartHandler) GetCart(w http.ResponseWriter, r *http.Request) {
+func getCartHandler(w http.ResponseWriter, r *http.Request) {
 	userID := r.URL.Query().Get("userId")
 	if userID == "" {
 		http.Error(w, "User ID required", http.StatusBadRequest)
 		return
 	}
 
-	cart, err := h.usecase.GetCart(userID)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(cart)
+}
+
+func main() {
+	http.HandleFunc("/cart/add", addItemHandler)
+	http.HandleFunc("/cart", getCartHandler)
+
+	log.Println("Simple cart service запущен на :8084")
+	log.Fatal(http.ListenAndServe(":8084", nil))
 }

@@ -3,7 +3,7 @@ package usecase
 import (
 	"time"
 
-	"cart-service/internal/cart"
+	"cart/internal/cart"
 )
 
 type CartRepository interface {
@@ -20,19 +20,19 @@ func NewCartUsecase(repo CartRepository) *CartUsecase {
 }
 
 func (uc *CartUsecase) AddItem(userID, productID string, quantity int, price float64) error {
-	cart, err := uc.repo.FindByID(userID)
+	c, err := uc.repo.FindByID(userID)
 	if err != nil {
-		cart = &cart.Cart{UserID: userID, UpdatedAt: time.Now()}
+		c = &cart.Cart{UserID: userID, UpdatedAt: time.Now()}
 	}
 
-	cart.AddItem(Item{
+	c.AddItem(cart.Item{
 		ProductID: productID,
 		Quantity:  quantity,
 		Price:     price,
 	})
-	cart.UpdatedAt = time.Now()
+	c.UpdatedAt = time.Now()
 
-	return uc.repo.Save(cart)
+	return uc.repo.Save(c)
 }
 
 func (uc *CartUsecase) GetCart(userID string) (*cart.Cart, error) {

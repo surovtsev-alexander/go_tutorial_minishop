@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"os"
 
-	"cart-service/internal/handler"
-	"cart-service/internal/repository"
-	"cart-service/internal/usecase"
+	"cart/internal/handler"
+	"cart/internal/repository"
+	"cart/internal/usecase"
 
 	"github.com/go-redis/redis/v8"
 )

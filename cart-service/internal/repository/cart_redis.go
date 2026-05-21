@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"time"
 
-	"cart-service/internal/cart"
+	"cart/internal/cart"
 	"github.com/go-redis/redis/v8"
 )
 
