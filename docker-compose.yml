@@ -1,4 +1,42 @@
+version: '3.8'
+
 services:
+  kafka:
+    image: confluentinc/cp-kafka:7.4.0
+    ports:
+      - "9092:9092"
+    environment:
+      # Настройки KRaft режима (заменяют ZooKeeper)
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka:29093'
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      # Сгенерированный UUID кластера (обязателен для инициализации KRaft)
+      CLUSTER_ID: 'MkU3OEVBNTcwNTg2NEYzQk'
+
+      # Добавьте эти две строки для корректной работы автосоздания в KRaft:
+      KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND: 'true'
+      KAFKA_METADATA_LOG_DIR: '/var/lib/kafka/metadata'
+
+      # Настройка сетевых интерфейсов и протоколов
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:29092,EXTERNAL://0.0.0.0:9092,CONTROLLER://0.0.0.0:29093
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:29092,EXTERNAL://localhost:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+
+      # Ограничения для локальной разработки (одиночный узел)
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_LOG_FLUSH_INTERVAL_MESSAGES: 9223372036854775807
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_DELETE_TOPIC_ENABLE: 'true'
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z localhost 29092 || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   product-service:
     build: ./product-service
     ports:
@@ -37,6 +75,10 @@ services:
       - "8085:8085"
     environment:
       - PORT=8085
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+    depends_on:
+      kafka:
+        condition: service_healthy
 
   kafka-consumer:
     build: ./kafka-consumer
@@ -44,13 +86,10 @@ services:
       - "8086:8086"
     environment:
       - PORT=8086
-
-#  simple-service:
-#    build: ./simple-service
-#    ports:
-#      - "8084:8084"
-#    environment:
-#      - PORT=8084
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+    depends_on:
+      kafka:
+        condition: service_healthy
 
   redis:
     image: redis:7-alpine
