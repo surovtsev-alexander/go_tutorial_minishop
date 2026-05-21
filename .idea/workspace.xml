@@ -5,10 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ff52c9e7-8c9b-41a8-9ef6-d2ab6e241258" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/kafka-consumer/Doсkerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kafka-producer/Doсkerfile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kafka-consumer/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/kafka-consumer/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kafka-producer/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/kafka-producer/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kafka-producer/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/kafka-producer/main.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

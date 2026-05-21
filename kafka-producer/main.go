@@ -14,6 +14,6 @@ func main() {
 }
 
 func addMessageHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write(http.StatusOk)
+	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(`{"status": "message received (stub)"}`))
 }
