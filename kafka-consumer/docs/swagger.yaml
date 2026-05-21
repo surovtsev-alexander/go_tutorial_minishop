@@ -1,0 +1,21 @@
+info:
+  contact: {}
+paths:
+  /receive:
+    get:
+      consumes:
+      - application/json
+      description: Receive message from Kafka
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Receive message
+      tags:
+      - messages
+swagger: "2.0"
