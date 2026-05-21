@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"github.com/segmentio/kafka-go"
 	"github.com/swaggo/http-swagger"
 	"log"
@@ -38,16 +39,32 @@ func main() {
 	log.Fatal(http.ListenAndServe(":8085", nil))
 }
 
+type SendMessageRequest struct {
+	Message string `json:"message"`
+}
+
 // @Summary Send message
 // @Description Send message to Kafka
 // @Tags messages
 // @Accept json
 // @Produce json
+// @Param request body SendMessageRequest true "Message request"
 // @Success 200 {object} map[string]string
 // @Router /send [post]
 func addMessageHandler(w http.ResponseWriter, r *http.Request) {
+	var req SendMessageRequest
+
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	if req.Message == "" {
+		http.Error(w, "Message cannot be empty", http.StatusBadRequest)
+		return
+	}
 	message := kafka.Message{
-		Value: []byte(`{"message": "test message"}`),
+		Value: []byte(req.Message),
 	}
 	err := kafkaWriter.WriteMessages(context.Background(), message)
 
@@ -58,5 +75,8 @@ func addMessageHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(`{"status": "message received (stub)"}`))
+	json.NewEncoder(w).Encode(map[string]string{
+		"status":  "message sent",
+		"message": req.Message,
+	})
 }

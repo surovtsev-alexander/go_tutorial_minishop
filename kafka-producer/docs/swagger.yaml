@@ -1,3 +1,9 @@
+definitions:
+  main.SendMessageRequest:
+    properties:
+      message:
+        type: string
+    type: object
 info:
   contact: {}
 paths:
@@ -6,6 +12,13 @@ paths:
       consumes:
       - application/json
       description: Send message to Kafka
+      parameters:
+      - description: Message request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/main.SendMessageRequest'
       produces:
       - application/json
       responses:
